@@ -8,7 +8,7 @@ const pxtoremPlugin = require('postcss-pxtorem')
 const PROD_RM_DEBUG = false
 
 nunjucks.configure({ autoescape: true })
-const tmpl = fs.readFileSync(path.join(__dirname, '../template.html')).toString()
+const tmpl = fs.readFileSync(path.join(__dirname, 'template.html')).toString()
 
 function getCode (node) {
   return JsonML.getChildren(
