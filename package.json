@@ -1,5 +1,5 @@
 {
-  "name": "kui/bisheng-plugin",
+  "name": "bisheng-plugin-kui",
   "version": "0.0.1",
   "description": "To support kui-like websites.",
   "scripts": {
