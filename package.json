@@ -1,6 +1,6 @@
 {
-  "name": "bisheng-plugin-kui",
-  "version": "0.0.1",
+  "name": "kui-bisheng-plugin",
+  "version": "0.0.2",
   "description": "To support kui-like websites.",
   "scripts": {
     "lint": "eslint --fix --ext .js --fix --ext .jsx src",
