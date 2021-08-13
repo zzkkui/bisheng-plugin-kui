@@ -25,6 +25,8 @@ module.exports = {
   rules: {
     'no-nested-ternary': 0,
     'no-param-reassign': 0,
-    'prefer-destructuring': 0
+    'prefer-destructuring': 0,
+    'react/prop-types': 0,
+    'array-callback-return': 0
   }
 }

@@ -3,8 +3,8 @@
   "version": "0.0.2",
   "description": "To support kui-like websites.",
   "scripts": {
-    "lint": "eslint --fix --ext .js --fix --ext .jsx src",
-    "eslint-fix": "eslint --fix --ext .js --fix --ext .jsx src",
+    "lint": "eslint --fix --ext .js --fix --ext .jsx src example",
+    "eslint-fix": "eslint --fix --ext .js --fix --ext .jsx src example",
     "babel": "babel ./src --out-dir ./lib && cp ./src/template.html ./lib",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
