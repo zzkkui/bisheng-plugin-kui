@@ -38,7 +38,7 @@ const transpile = (code) => {
 
 const getDependencies = (code, codeArr) => {
   return code.split('\n').reduce((acc, line) => {
-    const matches = line.match(/import (.+?) from "(.+)";$/)
+    const matches = line.match(/import (.+?) from (.+);?$/)
     if (matches) {
       if (matches.input.trim().startsWith('//')) {
         return acc
@@ -55,7 +55,7 @@ const getDependencies = (code, codeArr) => {
       }
       if (matches[2]) {
         if (matches[2].indexOf('/')) {
-          lib = matches[2].split('/')[0]
+          lib = matches[2].replace(/"|'|;/g, '').split('/')[0]
         } else {
           lib = matches[2]
         }
@@ -75,24 +75,25 @@ const getDependencies = (code, codeArr) => {
 }
 
 function LiveDemo (props) {
-  const { code, title, content, id, utils, lang, iframe, src, style, highlightedStyle } = props
+  const {
+    code,
+    title,
+    content,
+    id,
+    utils,
+    lang,
+    iframe,
+    src,
+    style,
+    highlightedStyle
+  } = props
 
   const editorEl = useRef(null)
   const styleEl = useRef(null)
-  const [height, setHeight] = useState(0)
   const [liveCode, setLiveCode] = useState()
   const [editCode, setEditCode] = useState()
   const [scope, setScope] = useState()
   const iframeRef = useRef(null)
-
-  function onFocus () {
-    setHeight('auto')
-  }
-
-  function onBlur () {
-    const styleHeight = styleEl.current ? styleEl.current.offsetHeight : 0
-    setHeight(editorEl.current.offsetHeight + styleHeight)
-  }
 
   function onCodeChange (code) {
     if (lang === 'tsx') {
@@ -140,7 +141,9 @@ function LiveDemo (props) {
         scope.iframeRef = iframeRef
         scope.iframeSrc = src
         scope.iframeHeight = iframe
-        iframeCode = transformer(transpile(sourceCode), { presets: ['env', 'react'] })
+        iframeCode = transformer(transpile(sourceCode), {
+          presets: ['env', 'react']
+        })
         window.IFRAME_CODES[`${src?.substring(1)}`] = iframeCode
       }
       setScope(scope)
@@ -192,7 +195,11 @@ function LiveDemo (props) {
           {title}
         </div>
         {/* 组件demo描述 */}
-        <div>{utils.toReactComponent(['div', { className: 'demo-description' }].concat(content))}</div>
+        <div>
+          {utils.toReactComponent(
+            ['div', { className: 'demo-description' }].concat(content)
+          )}
+        </div>
         <div className="demo-content">
           {iframe ? (
             <Frame>
@@ -207,55 +214,54 @@ function LiveDemo (props) {
               ></iframe>
             </Frame>
           ) : null}
-          {!iframe && style ? <style dangerouslySetInnerHTML={{ __html: style }} /> : null}
-          {liveCode
-            ? (
-              <LiveProvider
-                scope={{
-                  ...scope
-                }}
-                code={liveCode}
-                theme={github}
-                noInline={liveCode ? liveCode.includes('render(') : false}
-                language={lang}
-              >
-                {!iframe
-                  ? (
-                    <div className="demo-component">
-                      <LivePreview
-                        style={
-                          /import { (\w{3,},\s)*(Row|Col|Layout)(,\s\w{3,})* } from 'kui'/g.test(code)
-                            ? { width: '100%' }
-                            : { width: 'auto' }
-                        }
-                      />
-                    </div>
-                    )
-                  : null}
-                <LiveError style={errorCodeStyle} />
-                <div className="code-content" style={{ height: height }}>
-                  <div ref={editorEl}>
-                    <LiveEditor
-                      onChange={onCodeChange}
-                      onFocus={onFocus}
-                      onBlur={onBlur}
-                      code={editCode}
-                      language={lang}
-                    />
-                  </div>
-                  {highlightedStyle
-                    ? (
-                      <div key="style" className="highlight" ref={styleEl}>
-                        <pre>
-                          <code className="css" dangerouslySetInnerHTML={{ __html: highlightedStyle }} />
-                        </pre>
-                      </div>
+          {!iframe && style ? (
+            <style dangerouslySetInnerHTML={{ __html: style }} />
+          ) : null}
+          {liveCode ? (
+            <LiveProvider
+              scope={{
+                ...scope
+              }}
+              code={liveCode}
+              theme={github}
+              noInline={liveCode ? liveCode.includes('render(') : false}
+              language={lang}
+            >
+              {!iframe ? (
+                <div className="demo-component">
+                  <LivePreview
+                    style={
+                      /import { (\w{3,},\s)*(Row|Col|Layout)(,\s\w{3,})* } from 'kui'/g.test(
+                        code
                       )
-                    : null}
+                        ? { width: '100%' }
+                        : { width: 'auto' }
+                    }
+                  />
                 </div>
-              </LiveProvider>
-              )
-            : null}
+              ) : null}
+              <LiveError style={errorCodeStyle} />
+              <div className="code-content">
+                <div ref={editorEl}>
+                  <LiveEditor
+                    onChange={onCodeChange}
+                    code={editCode}
+                    language={lang}
+                  />
+                </div>
+                {highlightedStyle ? (
+                  <div key="style" className="highlight" ref={styleEl}>
+                    <pre>
+                      <code
+                        className="css"
+                        dangerouslySetInnerHTML={{ __html: highlightedStyle }}
+                      />
+                    </pre>
+                  </div>
+                ) : null}
+              </div>
+            </LiveProvider>
+          ) : null}
         </div>
       </div>
     </>

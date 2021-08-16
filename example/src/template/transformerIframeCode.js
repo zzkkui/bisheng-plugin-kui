@@ -1,16 +1,15 @@
 import * as types from '@babel/types'
 import generator from '@babel/generator'
+import { transform } from '@babel/standalone'
+import traverse from '@babel/traverse'
 
-export default async function transformer (code, parserOpts) {
-  //  parseSync
-  const { transform } = await import('@babel/standalone')
+export default function transformer (code, parserOpts) {
   const { ast } = transform(code, { ast: true, ...parserOpts })
 
   const codeAst = ast
 
   let renderReturn = null
-  const traverse = await import('@babel/traverse')
-  traverse.default(codeAst, {
+  traverse(codeAst, {
     CallExpression (callPath) {
       const callPathNode = callPath.node
       if (

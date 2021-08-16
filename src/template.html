@@ -66,7 +66,7 @@
       if ({{ injectProvider }}) {
         var container = null;
         Component = React.createElement(
-          require('kui').ConfigProvider,
+          require('antd').ConfigProvider,
           {
             getPopupContainer() { return container; },
           },

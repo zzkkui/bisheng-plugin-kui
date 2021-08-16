@@ -52,7 +52,7 @@ function getStyleNode (contentChildren) {
   )[0]
 }
 
-module.exports = ({ markdownData, noPreview, babelConfig, pxtorem, injectProvider }) => {
+module.exports = ({ markdownData, noPreview, babelConfig, pxtorem, injectProvider, OUTPUT = '_site', PUBLIC_PATH = '/' }) => {
   const meta = markdownData.meta
   meta.id = meta.filename.replace(/\.md$/, '').replace(/\//g, '-') // Should throw debugging demo while publish.
 
@@ -104,8 +104,8 @@ module.exports = ({ markdownData, noPreview, babelConfig, pxtorem, injectProvide
       injectProvider: !!injectProvider
     })
     const fileName = `demo-${Math.random()}.html`
-    const root = process.env.NODE_ENV !== 'development' ? '/react/' : '/'
-    fs.writeFile(path.join(process.cwd(), '_site', fileName), html, () => { })
+    const root = PUBLIC_PATH
+    fs.writeFile(path.join(process.cwd(), OUTPUT, fileName), html, () => { })
     markdownData.src = path.join(root, fileName)
   }
 

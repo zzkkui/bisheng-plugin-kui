@@ -51,11 +51,6 @@ class Content extends React.Component {
   render () {
     console.log(this.props)
 
-    const {
-      localizedPageData: {
-        meta: { hiddenAnchor }
-      }
-    } = this.props
     return (
       <div className="body">
         <div className="wapper">
@@ -64,7 +59,6 @@ class Content extends React.Component {
               <div className="content-wapper">
                 <Article {...this.props} />
               </div>
-              {hiddenAnchor ? null : <div className="toc-wapper">{this.renderToc(this.props)}</div>}
             </div>
           </div>
         </div>

@@ -6,12 +6,15 @@ const { ESBuildMinifyPlugin } = require('esbuild-loader')
 
 const isDev = process.env.NODE_ENV === 'development'
 
+const PUBLIC_PATH = '/'
+
 module.exports = {
   source: {
     docs: './docs'
   },
   themeConfig: {
     // 这里为空也要配个空对象，不然报错
+
   },
   output: './dist',
   hash: true,
@@ -23,6 +26,8 @@ module.exports = {
     config.externals = {
       'react-router-dom': 'ReactRouterDOM'
     }
+
+    config.output.publicPath = PUBLIC_PATH
 
     if (isDev) {
       config.devtool = 'source-map'
